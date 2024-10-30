@@ -58,6 +58,9 @@ def save_tree_as_png(root_node, folder="tree_visualizations", filename="decision
         fig.text(0.5, 0.95, subtext, ha='center', va='top', fontsize=25)
     plot_tree(ax, root_node, label_colors)
     add_legend(ax, label_colors) # For leaf nodes
+    
+    # Display the tree in the current workspace
+    plt.show()
 
     filepath = os.path.join(folder, filename)
     plt.savefig(filepath, bbox_inches='tight')

@@ -10,6 +10,9 @@ __pycache__/
 .src/Models/__pycache__/
 .src/Utilities/__pycache__/
 
+#Viusalizations
+.src/tree_visualizations/
+
 # Distribution / packaging
 .Python
 build/
