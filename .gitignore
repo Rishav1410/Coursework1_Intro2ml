@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Python DLL Caches
+.src/Models/__pycache__/
+.src/Utilities/__pycache__/
+
 # Distribution / packaging
 .Python
 build/
