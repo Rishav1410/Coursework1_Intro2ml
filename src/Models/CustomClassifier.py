@@ -2,11 +2,11 @@ import numpy as np
 
 class Node:
     def __init__(self, feature=None, threshold=None, left=None, right=None, value=None):
-        self.feature = feature       # Feature index for the split
-        self.threshold = threshold   # Threshold value for the split
-        self.left = left             # Left child node
-        self.right = right           # Right child node
-        self.value = value           # Leaf node value (class label)
+        self.feature = feature       
+        self.threshold = threshold   
+        self.left = left             
+        self.right = right           
+        self.value = value           
         
     def is_leaf(self):
         return self.value is not None
@@ -30,20 +30,20 @@ class DecisionTree:
         return self.entropy(y) - (len(y_left) / len(y) * self.entropy(y_left) + len(y_right) / len(y) * self.entropy(y_right))
 
     def find_split(self, dataset):
-        X, y = dataset[:, :-1], dataset[:, -1]  # Split dataset into features and labels
+        X, y = dataset[:, :-1], dataset[:, -1]  # Splitting up the given dataset 
         n_examples, n_features = X.shape
-        best_gain = -1
+        best_gain = -1  # Initializing to -1 ensures a split to be returned by the function, min IG can be 0
         best_feature, best_threshold = None, None
         
 
         for feature in range(n_features):
-            # Sort the dataset by the current feature
+            
             sorted_indices = np.argsort(X[:, feature])
             sorted_X = X[sorted_indices]
             sorted_y = y[sorted_indices]
 
             for i in range(1, n_examples):
-                # Calculate the threshold as the midpoint between two consecutive points
+                # Calculate the threshold as the midpoint between two consecutive points according to coursework guidelies
                 if sorted_X[i, feature] != sorted_X[i - 1, feature]:
                     threshold = (sorted_X[i, feature] + sorted_X[i - 1, feature]) / 2
                     left_indices = sorted_y[:i]
@@ -74,10 +74,10 @@ class DecisionTree:
         
 
     def decision_tree_learning(self, dataset, depth=0):
-        y = dataset[:, -1]  # Extract labels from the last column
+        y = dataset[:, -1]  # Extracting the labels from the last column
         
         if  len(np.unique(y)) == 1 or len(set(y)) == 1:
-            return Node(value=y[0]), depth  # Leaf node
+            return Node(value=y[0]), depth  
 
         split = self.find_split(dataset)
         
@@ -102,7 +102,7 @@ class DecisionTree:
         return 1 + max(self.find_depth(node.left), self.find_depth(node.right))
 
     def prune(self, node, validation_dataset):     
-        #Check an edge case 
+        #Checking this edge case 
         if node is None:
             return None
 
@@ -110,17 +110,17 @@ class DecisionTree:
         if node.is_leaf():
             return node  # It's already a leaf, no need to prune !!
 
-        # Prune the left and right subtrees
+        # Pruning the left and right subtrees of the given node
         if node.left is not None:
             node.left = self.prune(node.left, validation_dataset)
         if node.right is not None:
             node.right = self.prune(node.right, validation_dataset)
 
         
-        # Calculate accuracy before pruning (the current node is non-leaf)
+        # Calculating accuracy before pruning (the current node is non-leaf)
         before_prune_accuracy = self.accuracy(validation_dataset)
 
-        # Convert current node to a leaf node with the majority class
+        # Converting current node to a leaf node with the majority class
         class_counts = {}
         for sample in validation_dataset:
             label = sample[-1]
@@ -128,11 +128,11 @@ class DecisionTree:
                 class_counts[label] += 1
             else:
                 class_counts[label] = 1
-        majority_class = max(class_counts, key=class_counts.get) # Get the label with majority 
+        majority_class = max(class_counts, key=class_counts.get) # Getting the label with majority 
         
-        node.value = majority_class  # Replace with majority class
+        node.value = majority_class  # Replacing with majority class
 
-        # Calculate accuracy after pruning
+        # Calculating accuracy on validation set after pruning
         after_prune_accuracy = self.accuracy(validation_dataset)
 
         # If accuracy improved, we keep the leaf; otherwise, revert back to the previous state
