@@ -5,6 +5,9 @@ __pycache__/
 
 # C extensions
 *.so
+#Virtual environments
+.intro2ml/
+
 
 # Python DLL Caches
 .src/Models/__pycache__/
