@@ -145,5 +145,3 @@ class DecisionTree:
     def accuracy(self, dataset):
         predictions = np.array([self.predict(sample[:-1]) for sample in dataset])
         return np.mean(predictions == dataset[:, -1])
-    
-    
